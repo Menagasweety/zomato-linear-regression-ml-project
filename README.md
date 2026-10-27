@@ -1,31 +1,39 @@
-# Zomato Delivery Time — Linear Regression ML Project
+# 🍽️ Zomato Delivery Time Prediction | Machine Learning
 
-## Project objective
+A hands-on machine learning project focused on predicting food delivery time using Python and Scikit-learn. This project follows a structured regression workflow, from raw data auditing and exploratory analysis to model development, regularization, and final evaluation.
 
-Predict `Time_taken (min)` — the total delivery time in minutes — **at the moment the customer places the order**.
+> **Project Goal:** Predict the total delivery time (`Time_taken (min)`) at the moment a customer places an order, using only information available at that time.
 
-That prediction timing creates an explicit leakage rule:
+## 📌 Project Overview
 
-> `Time_Order_picked` must not be used as an input because pickup happens after the prediction moment.
+Food delivery time depends on several factors, including delivery partner characteristics, restaurant and order information, traffic conditions, and weather. This project explores the dataset and develops regression models to estimate delivery time while applying appropriate data preprocessing and leakage-prevention practices.
 
-## Dataset
+- **Project type:** Supervised Machine Learning — Regression
+- **Dataset size:** 45,584 rows × 20 columns
+- **Target variable:** `Time_taken (min)`
+- **Primary objective:** Predict delivery duration in minutes
+- **Primary models:** Linear Regression, Ridge, Lasso, and ElasticNet
 
-The uploaded dataset contains **45,584 rows and 20 columns**.
+## 🎯 Project Objectives
 
-The repository is based on the uploaded `Zomato Dataset.csv`. GitHub references were used as methodology/context checks, not as substitutes for inspecting this file.
+- Audit and understand the raw dataset before modifying it.
+- Handle missing values, inconsistent data types, invalid values, and duplicates based on evidence from the data.
+- Perform Exploratory Data Analysis (EDA) to identify patterns and relationships.
+- Engineer meaningful features using information available at prediction time.
+- Establish a baseline before training more advanced regression models.
+- Understand linear regression coefficients and regularization.
+- Evaluate models using appropriate regression metrics.
+- Diagnose residuals and investigate potential overfitting.
+- Maintain a reproducible workflow using Scikit-learn pipelines.
 
-Reference repositories:
-- https://github.com/Parth-Malik/Zomato-Delivery-Time-Prediction
-- https://github.com/CodeByMiraj/Zomato-Delivery-Analytics
-- https://github.com/Varunnagar/Zomato-Food-Delivery-Analysis
-- https://github.com/PN-Piyush/Zomato-Delivery-Analytics
-
-## Project structure
+## 🗂️ Project Structure
 
 ```text
 Zomato_Linear_Regression_ML_Project/
+│
 ├── data/
 │   └── Zomato Dataset.csv
+│
 ├── notebooks/
 │   ├── 01_Data_Audit.ipynb
 │   ├── 02_Data_Cleaning.ipynb
@@ -36,104 +44,180 @@ Zomato_Linear_Regression_ML_Project/
 │   ├── 07_Regularization_Evaluation.ipynb
 │   ├── 08_Final_Evaluation.ipynb
 │   └── 09_Optional_Classification_Confusion_Matrix.ipynb
+│
 ├── outputs/
 │   ├── cleaned/
 │   ├── model_results/
 │   ├── figures/
 │   └── models/
+│
 ├── README.md
 ├── requirements.txt
 └── .gitignore
 ```
 
-## Learning path
+## 🔄 Machine Learning Workflow
 
-1. **Data Audit** — inspect before changing anything.
-2. **Cleaning** — standardize types, missing values, invalid values and duplicates.
-3. **EDA** — understand target distribution and relationships.
-4. **Feature Engineering** — create distance and order-time features available at prediction time.
-5. **Baseline** — establish a simple benchmark.
-6. **Linear Regression** — learn least-squares optimization and coefficients.
-7. **Regularization** — compare Ridge, Lasso and ElasticNet using cross-validation.
-8. **Final Evaluation** — inspect MAE, RMSE, R², train/test gap and residuals.
-9. **Optional Classification** — only here do we use a confusion matrix.
+| Stage | Notebook | Purpose |
+|---|---|---|
+| 1 | `01_Data_Audit.ipynb` | Inspect dataset structure, data types, missing values, duplicates, and target |
+| 2 | `02_Data_Cleaning.ipynb` | Apply justified cleaning and validation rules |
+| 3 | `03_EDA.ipynb` | Explore target distribution, feature relationships, and patterns |
+| 4 | `04_Feature_Engineering.ipynb` | Create meaningful prediction-time features |
+| 5 | `05_Baseline_Model.ipynb` | Establish a benchmark for model comparison |
+| 6 | `06_Linear_Regression.ipynb` | Train and interpret a Linear Regression model |
+| 7 | `07_Regularization_Evaluation.ipynb` | Compare regularized models using validation and cross-validation |
+| 8 | `08_Final_Evaluation.ipynb` | Evaluate generalization and inspect residuals |
+| 9 | `09_Optional_Classification_Confusion_Matrix.ipynb` | Demonstrate classification metrics on a separately defined binary target |
 
-## Core ML pipeline
+## 🧠 Models and Techniques
 
-```text
-Raw CSV
-  ↓
-Audit
-  ↓
-Cleaning
-  ↓
-Feature Engineering
-  ↓
-Train / Test Split
-  ↓
-ColumnTransformer
-  ├── Numeric → median imputation → scaling
-  └── Categorical → most-frequent imputation → one-hot encoding
-  ↓
-Regression Model
-  ├── Linear Regression
-  ├── Ridge
-  ├── Lasso
-  └── ElasticNet
-  ↓
-Cross-validation / hyperparameter tuning
-  ↓
-Final test evaluation
-  ↓
-Residual diagnostics
+**Regression models**
+- Baseline model
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+- ElasticNet Regression
+
+**Data preprocessing**
+- Missing-value imputation
+- Numerical feature scaling
+- Categorical feature encoding
+- `ColumnTransformer` for column-specific preprocessing
+- Scikit-learn `Pipeline` for reproducible model workflows
+
+**Model validation**
+- Train/test split
+- Cross-validation
+- Hyperparameter tuning
+- Train/test performance comparison
+- Residual analysis
+
+## 🛡️ Data Leakage Prevention
+
+A central design decision in this project is to predict delivery time **when the customer places the order**.
+
+Therefore, `Time_Order_picked` is excluded from the model inputs because pickup occurs after the prediction point. Using this information would allow the model to access information that would not be available in a real deployment scenario.
+
+The preprocessing pipeline is also fitted on training data within the validation workflow, preventing information from validation or test data from influencing learned preprocessing parameters.
+
+These practices help produce a more realistic evaluation of model performance.
+
+## 📏 Evaluation Metrics
+
+The regression models are assessed using the following metrics:
+
+| Metric | What it tells us |
+|---|---|
+| **MAE** | Average absolute prediction error, measured in minutes |
+| **RMSE** | Penalizes larger prediction errors more strongly |
+| **R² Score** | Measures predictive performance relative to a mean-target baseline |
+
+Model selection is based on validation results, appropriate test-set evaluation, and the overall generalization gap—not simply on the algorithm used.
+
+## ⚖️ Understanding Regularization
+
+Regularization helps control model complexity by penalizing large coefficients.
+
+- **Linear Regression:** Minimizes the sum of squared prediction errors.
+- **Ridge (L2):** Adds a penalty based on squared coefficient magnitudes.
+- **Lasso (L1):** Adds a penalty based on absolute coefficient magnitudes and can shrink some coefficients to zero.
+- **ElasticNet:** Combines L1 and L2 regularization.
+
+Regularization strength is selected through validation rather than assumed in advance.
+
+## 📊 Regression vs. Classification
+
+The primary task is a **regression problem** because delivery time is a continuous numerical value.
+
+A confusion matrix is not an appropriate primary evaluation tool for this task. The optional classification notebook demonstrates a separate binary classification example by converting the historical target into `Delayed` and `On Time` categories using an explicitly defined threshold.
+
+This optional experiment is separate from the main delivery-time regression workflow.
+
+## 🛠️ Tech Stack
+
+- **Language:** Python
+- **Environment:** Jupyter Notebook
+- **Data manipulation:** Pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn
+- **Machine learning:** Scikit-learn
+- **Version control:** Git and GitHub
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd Zomato_Linear_Regression_ML_Project
 ```
 
-## Why Pipeline?
+Replace the placeholder with your actual GitHub repository URL.
 
-The scikit-learn `Pipeline` ensures preprocessing is learned from training data rather than accidentally using information from the test set.
+### 2. Create and activate a virtual environment
 
-This is an important form of leakage prevention.
+```bash
+python -m venv .venv
+```
 
-## Metrics
+Windows:
 
-### MAE
-Average absolute prediction error in minutes.
+```bash
+.venv\Scripts\activate
+```
 
-### RMSE
-Square-root of mean squared error. Larger errors receive more penalty.
+### 3. Install dependencies
 
-### R²
-Measures how much variation in the target is explained relative to a mean-prediction baseline.
+```bash
+pip install -r requirements.txt
+```
 
-## Regularization
+### 4. Launch Jupyter Notebook
 
-- **Linear Regression:** minimizes squared error.
-- **Ridge:** squared error + L2 coefficient penalty.
-- **Lasso:** squared error + L1 coefficient penalty.
-- **ElasticNet:** squared error + combination of L1 and L2 penalties.
+```bash
+jupyter notebook
+```
 
-The best model is selected from validation/test evidence, not from the name of the algorithm.
+### 5. Run the notebooks in sequence
 
-## Important modeling rule
+Execute notebooks `01` through `08` in order. Notebook `09` is optional.
 
-`Time_Order_picked` is intentionally excluded.
+Ensure dataset paths match the repository structure and execute earlier notebooks before those that depend on their outputs.
 
-If the model were deployed when the customer places an order, pickup time would not yet exist. Including it would make offline evaluation unrealistically optimistic.
+## 📁 Dataset and References
 
-## Confusion matrix
+The project uses the uploaded `Zomato Dataset.csv`, containing 45,584 rows and 20 columns.
 
-A confusion matrix is **not appropriate for the main regression problem** because delivery time is continuous.
+The following public repositories were consulted as methodology and context references. Their cleaning decisions are not automatically treated as correct for this dataset.
 
-The optional notebook converts the historical target into a binary classification label (`Delayed` vs `On Time`) to demonstrate when a confusion matrix is appropriate.
+- [Zomato Delivery Time Prediction — Parth Malik](https://github.com/Parth-Malik/Zomato-Delivery-Time-Prediction)
+- [Zomato Delivery Analytics — CodeByMiraj](https://github.com/CodeByMiraj/Zomato-Delivery-Analytics)
+- [Zomato Food Delivery Analysis — Varunnagar](https://github.com/Varunnagar/Zomato-Food-Delivery-Analysis)
+- [Zomato Delivery Analytics — PN-Piyush](https://github.com/PN-Piyush/Zomato-Delivery-Analytics)
 
-## Reproducibility
+Dataset provenance and redistribution permissions should be verified before publishing the CSV publicly.
 
-Run notebooks in this order:
+## 📚 Key Learning Outcomes
 
-`01 → 02 → 03 → 04 → 05 → 06 → 07 → 08`
+Through this project, the intended learning outcomes include:
 
-Notebook 09 is optional.
+- Understanding the complete regression modeling lifecycle.
+- Performing data auditing and evidence-based cleaning.
+- Exploring data through meaningful visualizations.
+- Building prediction-time features while avoiding target and temporal leakage.
+- Understanding coefficients, regularization, and model evaluation.
+- Using pipelines to organize preprocessing and model training.
+- Comparing models using appropriate validation metrics.
+- Interpreting residuals and evaluating model generalization.
 
-## Important note
+## ⚠️ Project Status and Results
 
-Some GitHub references report additional cleaning decisions for similar copies of this dataset. This project does not blindly copy those decisions. The notebooks inspect and document the actual uploaded CSV before applying transformations.
+This repository is intended as a practical machine learning learning project. Final performance metrics, model comparisons, and conclusions should be reported only after the notebooks have been executed and the results verified.
+
+No specific model accuracy or best-performing algorithm is claimed in advance.
+
+---
+
+**Author:** Menaga Krishnamurthy
+
+*Built as part of a hands-on journey into Data Science and Machine Learning.*
